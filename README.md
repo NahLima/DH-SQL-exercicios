@@ -180,9 +180,9 @@ select name as nome, code as código from country;
 ````
 #### 29 Liste os nomes das cidades ao lado do nome de seu respectivo país
 ````
-select city.name, country.name from city
+select city.name as City_Name, country.name as Country_Name from city
 join country
-ON city.country_code = country.code;
+ON city.country_code = country.code
 order by country.name;
 ````
 #### 30 Listar os nomes dos países lado a lado com os idiomas falados neles
@@ -200,3 +200,82 @@ join country_language
 ON country_language.country_code = country.code
 order by country.name;
 ````
+#### 32 Calcule a população de cada continente
+````
+SELECT continent, SUM(population) AS pop_continental from country
+group by continent;
+````
+#### 33 Mostre os códigos dos países com pelo menos 3 idiomas oficiais
+````
+SELECT 
+    country_code,
+    count(language) As contagem,
+    group_concat(language order by language separator '  |  ' ) as linguas 
+FROM
+    country_language
+GROUP BY country_code
+having contagem >= 3; 
+````
+#### 34 Liste os nomes das cidades ao lado dos nomes dos países cujo nome começa com o nome da cidade
+````
+SELECT 
+    city.name AS city_name, country.name AS country_name
+FROM
+    city,
+    country
+WHERE
+    country.name LIKE CONCAT(city.name, '%')
+    and country.code = city.country_code
+
+
+// ou 
+
+SELECT 
+    city.name AS city_name, country.name AS country_name
+FROM
+    city
+join country on 
+country.name LIKE CONCAT(city.name, '%')
+and country.code = city.country_code;
+````
+#### 35 Repita a query acima, mas mostre o nome de todas as cidades mesmo que não haja "match" com nenhum país
+````
+SELECT 
+    city.country_code AS city_country_code,
+    city.name AS city_name,
+    country.code AS country_code,
+    country.name AS country_name
+FROM
+    city
+        LEFT JOIN
+    country ON country.code = city.country_code
+        AND country.name LIKE CONCAT(city.name, '%')
+    
+````
+#### 36 Liste países. Adicione somente as cidades que tem população maior do que 3 milhões de habitantes
+
+````
+SELECT 
+    country.name, 
+    city.name, 
+    city.population
+FROM country
+	LEFT JOIN city 
+	ON city.country_code = country.code
+	AND city.population > 3000000
+    order by country.name asc
+    
+````
+
+
+
+Calcular a quantidade de pessoas que fala cada um desses idiomas
+Liste os nomes das cidades ao lado dos nomes dos países cujo nome começa com o nome da cidade
+Selecionar os nomes das diferentes regiões do mundo
+Selecionar os nomes das distintas regiões do mundo que possuem países com mais de 100 milhões de habitantes
+Listar códigos dos países que possuem ao menos um idioma oficial falado por uma população maior que 2% e menor que 9% do país
+Utilizando o COALESCE trabalhe os valores NULL da tabela COUNTRY e substitua-os por um valor que deseja
+Crie uma consulta que concatene o nome do país e da cidade
+Substitua o nome de uma das cidades da Europa por São Paulo
+Encontre qual o maior nome de cidade da Ásia
+Crie uma regra que avalie a quantidade de habitantes de uma localidade. Se essa localidade possuir mais de 5 milhões de habitantes, retorne como "Populosa". Se for menor que 5 milhões de habitantes, retorne como "Ainda tem espaço".
