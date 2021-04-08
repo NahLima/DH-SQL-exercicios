@@ -266,15 +266,147 @@ FROM country
     order by country.name asc
     
 ````
+#### 37 Calcular a quantidade de pessoas que fala cada um desses idiomas
+
+````
+select 
+	country.code, 
+	country.population, 
+    country_language.language, 
+    country_language.percentage,
+    (round(((country_language.percentage / 100) * country.population/ 100) *100 ,0)) As population_by_language
+from country
+join country_language 
+on country.code = country_language.country_code
+````
+#### 38 Selecionar os nomes das diferentes regiões do mundo
+
+````
+SELECT DISTINCT region
+FROM country
+ORDER BY region;
+````
+#### 39 Selecionar os nomes das distintas regiões do mundo que possuem países com mais de 100 milhões de habitantes
+
+````
+SELECT DISTINCT
+    (region), name, population
+FROM
+    country
+where population >= 100000000
+````
+#### 40 Listar códigos dos países que possuem ao menos um idioma oficial falado por uma população maior que 2% e menor que 9% do país
+
+````
+SELECT 
+    code,
+    country_language.language,
+    country_language.is_official population,
+    country_language.percentage
+FROM
+    country
+        JOIN
+    country_language
+WHERE
+    is_official = 'T' AND percentage >= 2
+        AND percentage <= 9;
+````
+#### 41 Utilizando o COALESCE trabalhe os valores NULL da tabela COUNTRY e substitua-os por um valor que deseja
+
+````
+select name, coalesce(indep_year, null,  1980 )  from country;
+````
+#### 42 Mostre o pais e a data calculada de 7  dias antes o ultimo dia do mes de fevereiro do ano de independencia
+````
+SELECT 
+    name,
+    indep_year,
+    DATE_ADD(LAST_DAY(MAKEDATE(indep_year, 34)),
+        INTERVAL - 7 DAY) - '7 ultimo dia de fevereiro'
+FROM
+    country
+````
+#### 43 Crie uma consulta que concatene o nome do país e da cidade
+````
+select country.name as país, count(city.name) as contagem_cidades,
+group_concat(country.name, ' - ' ,city.name separator ' | ') as cidadePaisConcat
+from country
+join city
+on country.code = city.country_code
+GROUP BY country_code
+````
+#### 44 Crie uma consulta que concatene o nome do país e da cidade
+````
+select country.name as país, count(city.name) as contagem_cidades,
+group_concat(country.name, ' - ' ,city.name separator ' | ') as cidadePaisConcat
+from country
+join city
+on country.code = city.country_code
+GROUP BY country_code
+
+-- ou 
+
+select country.name as país, count(city.name) as contagem_cidades,
+group_concat(city.name separator ' | ') as cidadePaisConcat
+from country
+join city
+on country.code = city.country_code
+GROUP BY country_code;
+````
+#### 45 Substitua o nome de uma das cidades da Europa por São Paul   --> pesquisar melhor isso.
+````
+UPDATE city
+SET name = 'São Paulo'
+WHERE name = 'Kabul'; 
+````
+#### 46 Encontre qual o maior nome de cidade da Ásia
+````
+SELECT 
+    Distinct(LENGTH(city.name)) AS contagem, city.name, country.continent
+FROM city
+JOIN country
+where continent = 'Asia'
+ORDER BY contagem DESC
+Limit 3;
+````
+#### 47 Crie uma regra que avalie a quantidade de habitantes de uma localidade. Se essa localidade possuir mais de 5 milhões de habitantes, retorne como "Populosa".  Se for menor que 5 milhões de habitantes, retorne como "Ainda tem espaço"
+````
+select name as cidade , population as qtd_pessoas , 
+	(Select case
+	when population > 5000000 then 'Populosa'
+    when population < 5000000 then 'Ainda tem espaço'
+    end) as retorno
+from city
+order by qtd_pessoas Desc;
+````
+#### 48 Calcule a população de cada continente E Mostre a população dos continentes por ordem decrescente
+````
+select sum(city.population) as contagem_pop,country.continent from city
+join country
+on city.country_code = country.code
+group by continent
+order by  contagem_pop desc;
+````
+#### 49 Encontre os 5 distritos mais populosos do mundo
+````
+select district, population from city
+order by population desc
+limit 5;
+````
+#### 50 Mostre os códigos dos países com pelo menos 3 idiomas oficiais
+````
+select district, population from city
+order by population desc
+limit 5;
+````
 
 
 
-Calcular a quantidade de pessoas que fala cada um desses idiomas
-Liste os nomes das cidades ao lado dos nomes dos países cujo nome começa com o nome da cidade
-Selecionar os nomes das diferentes regiões do mundo
-Selecionar os nomes das distintas regiões do mundo que possuem países com mais de 100 milhões de habitantes
-Listar códigos dos países que possuem ao menos um idioma oficial falado por uma população maior que 2% e menor que 9% do país
-Utilizando o COALESCE trabalhe os valores NULL da tabela COUNTRY e substitua-os por um valor que deseja
+
+
+
+
+
 Crie uma consulta que concatene o nome do país e da cidade
 Substitua o nome de uma das cidades da Europa por São Paulo
 Encontre qual o maior nome de cidade da Ásia
