@@ -393,21 +393,33 @@ select district, population from city
 order by population desc
 limit 5;
 ````
-#### 50 Mostre os códigos dos países com pelo menos 3 idiomas oficiais
+#### 50 Buscar os nomes dos distritos com população maior que 10 milhões de habitantes
 ````
 select district, population from city
 order by population desc
 limit 5;
 ````
+#### 51 Crie uma tabela simples, contendo 3 colunas de texto e 3 colunas numéricas. Os tamanhos dos campos podem ser diversos
+````
 
-
-
-
-
-
-
-
-Crie uma consulta que concatene o nome do país e da cidade
-Substitua o nome de uma das cidades da Europa por São Paulo
-Encontre qual o maior nome de cidade da Ásia
-Crie uma regra que avalie a quantidade de habitantes de uma localidade. Se essa localidade possuir mais de 5 milhões de habitantes, retorne como "Populosa". Se for menor que 5 milhões de habitantes, retorne como "Ainda tem espaço".
+CREATE TABLE clientes (
+    id_cliente INTEGER AUTO_INCREMENT PRIMARY KEY,
+    nome_cliente VARCHAR(80) NOT NULL,
+    endereço_cliente VARCHAR(20)  NOT NULL,
+    telefone_cliente INTEGER NOT NULL,
+    sexo VARCHAR(30) NOT NULL,
+    email_cliente VARCHAR(100) UNIQUE NOT NULL,
+    cpf_cliente INTEGER  NOT NULL
+);
+    
+````
+#### 52 Inclua uma coluna na tabela
+   
+````
+Alter table clientes
+    add column nome_conjuge varchar(200);
+````
+#### 53 Elimine a tabela que criou por completo
+````
+    DROP table clientes;
+````
